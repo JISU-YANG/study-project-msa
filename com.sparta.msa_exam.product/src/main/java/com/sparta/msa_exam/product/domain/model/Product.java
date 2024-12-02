@@ -1,14 +1,14 @@
 package com.sparta.msa_exam.product.domain.model;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+@Getter
+@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Entity
 @Table(name = "p_product")
-@Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,4 +20,17 @@ public class Product {
 
     @Column(name = "supply_price")
     private Integer supplyPrice;
+
+    public static Product createProduct(String name, Integer supplyPrice) {
+        return Product.builder()
+                .name(name)
+                .supplyPrice(supplyPrice)
+                .build();
+    }
+
+    public void updateProduct(String name, Integer supplyPrice) {
+        this.name = name;
+        this.supplyPrice = supplyPrice;
+    }
+
 }

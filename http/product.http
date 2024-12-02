@@ -1,0 +1,26 @@
+### 상품 추가
+POST localhost:19091/products
+Content-Type: application/json
+
+{
+  "name": "2024-Monitor",
+  "supply_price": 230000
+}
+
+### 상품 전체 조회
+GET localhost:19091/products
+
+### 상품 단건 조회
+GET localhost:19091/products/1
+
+### 상품 수정
+PUT localhost:19091/products/1
+Content-Type: application/json
+
+{
+  "name": "2023-Monitor",
+  "supply_price": 90000
+}
+
+### 상품 삭제
+DELETE localhost:19091/products/3

@@ -8,5 +8,11 @@ public interface ProductService {
 
     List<Product> getAllProducts();
 
-    void createProduct(String name, Integer supply_price);
+    void createProduct(String name, Integer supplyPrice);
+
+    Product getProductById(Long id);
+
+    void deleteProductById(Long id);
+
+    void updateProduct(Long id, String name, Integer supplyPrice);
 }
