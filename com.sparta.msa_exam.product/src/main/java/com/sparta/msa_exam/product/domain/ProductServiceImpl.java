@@ -28,8 +28,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product getProductById(Long id) {
-        Product product = validateProduct(id);
-        return product;
+        return validateProduct(id);
     }
 
     @Transactional

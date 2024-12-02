@@ -1,0 +1,43 @@
+### 주문 생성
+POST localhost:19091/orders
+Content-Type: application/json
+
+{
+  "order_product": [
+    {
+      "product_id": 1,
+      "amount": 2
+    },
+    {
+      "product_id": 2,
+      "amount": 2
+    }
+  ]
+}
+
+### 주문 전체 조회
+GET localhost:19091/orders
+
+
+### 주문 단건 조회
+GET localhost:19091/orders/2
+
+### 주문 수정
+PUT localhost:19091/orders/1
+Content-Type: application/json
+
+{
+  "order_product": [
+    {
+      "product_id": 1,
+      "amount": 10
+    },
+    {
+      "product_id": 2,
+      "amount": 3
+    }
+  ]
+}
+
+### 주문 삭제
+DELETE localhost:19091/orders/1

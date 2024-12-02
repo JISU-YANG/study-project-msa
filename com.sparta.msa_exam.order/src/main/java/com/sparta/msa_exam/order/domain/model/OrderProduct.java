@@ -1,14 +1,14 @@
 package com.sparta.msa_exam.order.domain.model;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+@Getter
+@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Entity
 @Table(name = "p_order_product")
-@Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class OrderProduct {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,4 +21,15 @@ public class OrderProduct {
 
     @Column(name = "product_id", nullable = false)
     private Long productId;
+
+    @Column(name = "amount", nullable = false)
+    private Integer amount;
+
+    public static OrderProduct createOrderProduct(Order order, Long product_id, Integer amount) {
+        return OrderProduct.builder()
+                .order(order)
+                .productId(product_id)
+                .amount(amount)
+                .build();
+    }
 }
