@@ -2,19 +2,20 @@ package com.sparta.msa_exam.order.domain;
 
 import com.sparta.msa_exam.order.domain.dto.OrderRequestDto;
 import com.sparta.msa_exam.order.domain.dto.OrderResponseDto;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RequiredArgsConstructor
 @RestController
 @RequestMapping("/orders")
+@RequiredArgsConstructor
 public class OrderController {
     private final OrderService orderService;
 
     @PostMapping
-    public void createOrder(@RequestBody OrderRequestDto orderRequestDto) {
+    public void createOrder(@Valid @RequestBody OrderRequestDto orderRequestDto) {
         orderService.createOrder(orderRequestDto.getOrderProductDtoList());
     }
 
@@ -31,7 +32,7 @@ public class OrderController {
     }
 
     @PutMapping("/{order_id}")
-    public void updateOrder(@PathVariable("order_id") Long orderId, @RequestBody OrderRequestDto orderRequestDto) {
+    public void updateOrder(@PathVariable("order_id") Long orderId, @Valid @RequestBody OrderRequestDto orderRequestDto) {
         orderService.updateOrder(orderId, orderRequestDto.getOrderProductDtoList());
     }
 

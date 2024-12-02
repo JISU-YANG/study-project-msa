@@ -26,7 +26,12 @@ public class Order {
     }
 
     public void updateOrder(List<OrderProduct> orderProductList) {
-        this.productList.clear();
-        this.productList.addAll(orderProductList);
+        if (this.productList != null) {
+            this.productList.clear();
+            this.productList.addAll(orderProductList);
+        }else{
+            this.productList = orderProductList;
+        }
+
     }
 }
