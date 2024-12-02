@@ -1,0 +1,22 @@
+### 회원가입
+POST localhost:19091/auth/sign-up
+Content-Type: application/json
+
+{
+  "username": "test",
+  "password": "1234"
+}
+
+### 로그인
+POST localhost:19091/auth/sign-in
+Content-Type: application/json
+
+{
+  "username": "test",
+  "password": "1234"
+}
+
+### 토큰 갱신
+PUT localhost:19091/auth/refresh-token
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJ1c2VyX2lkIjoxLCJpc3MiOiJhdXRoIiwiaWF0IjoxNzMzMTY0MjI4LCJleHAiOjE3MzMxNjQ4Mjh9.dzjJrt4Dve9vUC447cOJkPoxP5_BvPTgco84bIMuoCDuAQKTPM_BbKaGho1D7yRaRllujdOW1dZO8y9QnObglQ
+X-Refresh-Token: Bearer eyJhbGciOiJIUzUxMiJ9.eyJ1c2VyX2lkIjoxLCJpc3MiOiJhdXRoIiwiaWF0IjoxNzMzMTY0MjI4LCJleHAiOjE3MzMxNzUwMjh9.CyQxSIgCoPEd7WYPHH3dQppbOAhlurJ9uHUDUXtdDvkJL41VKmVMyTo8up_Er-CXLjxNZQkmv_YotzKtlIm18Q
