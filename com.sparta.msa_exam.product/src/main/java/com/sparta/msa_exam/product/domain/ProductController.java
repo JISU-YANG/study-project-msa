@@ -2,6 +2,7 @@ package com.sparta.msa_exam.product.domain;
 
 import com.sparta.msa_exam.product.domain.dto.ProductRequestDto;
 import com.sparta.msa_exam.product.domain.dto.ProductResponseDto;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +16,7 @@ public class ProductController {
     private final ProductService productService;
 
     @PostMapping
-    public void addProduct(@RequestBody ProductRequestDto requestDto) {
+    public void addProduct(@Valid @RequestBody ProductRequestDto requestDto) {
         productService.createProduct(requestDto.getName(), requestDto.getSupplyPrice());
     }
 
@@ -35,7 +36,7 @@ public class ProductController {
     }
 
     @PutMapping("/{product_id}")
-    public void updateProduct(@PathVariable(name = "product_id") Long id, @RequestBody ProductRequestDto requestDto) {
+    public void updateProduct(@PathVariable(name = "product_id") Long id, @Valid @RequestBody ProductRequestDto requestDto) {
         productService.updateProduct(id, requestDto.getName(), requestDto.getSupplyPrice());
     }
 
