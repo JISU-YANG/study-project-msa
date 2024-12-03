@@ -21,7 +21,7 @@ public class OrderResponseDto {
         return new OrderResponseDto(
                 order.getId(),
                 order.getProductList().stream()
-                        .map(OrderProduct::getId)
+                        .map(OrderProduct::getProductId)
                         .toList()
         );
     }
