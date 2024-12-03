@@ -1,5 +1,6 @@
 package com.sparta.msa_exam.order.domain;
 
+import com.sparta.msa_exam.order.client.ProductClient;
 import com.sparta.msa_exam.order.domain.dto.OrderProductDto;
 import com.sparta.msa_exam.order.domain.model.Order;
 import com.sparta.msa_exam.order.domain.model.OrderProduct;
@@ -9,25 +10,24 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
+    private final ProductClient productClient;
 
     @Transactional
     @Override
     public void createOrder(List<OrderProductDto> productList) {
         Order order = Order.createOrder();
-        List<OrderProduct> orderProductList = productList.stream()
-                .map(dto -> OrderProduct.createOrderProduct(
-                        order, dto.getProductId(), dto.getAmount()
-                )).collect(Collectors.toList());
 
-        order.updateOrder(orderProductList);
+        order.updateOrder(
+                validateProductList(order, productList)
+        );
         orderRepository.save(order);
     }
 
@@ -35,12 +35,9 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void updateOrder(Long orderId, List<OrderProductDto> productList) {
         Order order = validateOrder(orderId);
-        List<OrderProduct> orderProductList = productList.stream()
-                .map(dto -> OrderProduct.createOrderProduct(
-                        order, dto.getProductId(), dto.getAmount()
-                )).collect(Collectors.toList());
-
-        order.updateOrder(orderProductList);
+        order.updateOrder(
+                validateProductList(order, productList)
+        );
     }
 
     @Transactional
@@ -63,5 +60,17 @@ public class OrderServiceImpl implements OrderService {
     private Order validateOrder(Long id) {
         return orderRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Order not found"));
+    }
+
+    private List<OrderProduct> validateProductList(Order order, List<OrderProductDto> productList) {
+        List<OrderProduct> orderProductList = new ArrayList<>();
+
+        for(OrderProductDto dto : productList) {
+            if (productClient.existProductById(dto.getProductId())) {
+                orderProductList.add(OrderProduct.createOrderProduct(order, dto.getProductId(), dto.getAmount()));
+            }
+        }
+
+        return orderProductList;
     }
 }

@@ -15,4 +15,6 @@ public interface ProductService {
     void deleteProductById(Long id);
 
     void updateProduct(Long id, String name, Integer supplyPrice);
+
+    boolean existProductById(Long productId);
 }

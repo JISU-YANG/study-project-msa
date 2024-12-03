@@ -7,6 +7,9 @@ Content-Type: application/json
   "name": "2024-Monitor",
   "supply_price": 230000
 }
+### 상품 존재유무 조회
+GET localhost:19091/products/1/exists
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJ1c2VyX2lkIjoyLCJpc3MiOiJhdXRoIiwiaWF0IjoxNzMzMjI1NzAyLCJleHAiOjE3MzMyMjYzMDJ9.Wy4xLKtp8Lgs5t-86BxkXlKaS1qsHNPRH3OSY6GreZp9tAbAj5T4H1lETHOwRecBk4rkQf0hHvId4x_ErNDQ1A
 
 ### 상품 전체 조회
 GET localhost:19091/products

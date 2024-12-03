@@ -12,6 +12,14 @@ Content-Type: application/json
     {
       "product_id": 2,
       "amount": 2
+    },
+    {
+      "product_id": 3,
+      "amount": 3
+    },
+    {
+      "product_id": 4,
+      "amount": 4
     }
   ]
 }

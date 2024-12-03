@@ -45,4 +45,9 @@ public class ProductController {
         productService.deleteProductById(productId);
     }
 
+    @GetMapping("/{product_id}/exists")
+    public boolean existProductById(@PathVariable(name = "product_id") Long productId) {
+        return productService.existProductById(productId);
+    }
+
 }

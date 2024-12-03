@@ -46,6 +46,11 @@ public class ProductServiceImpl implements ProductService {
         productRepository.save(product);
     }
 
+    @Override
+    public boolean existProductById(Long productId) {
+        return productRepository.findById(productId).isPresent();
+    }
+
     protected Product validateProduct(Long id) {
         return productRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found"));
