@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://msa-database.c1yu8c0gkztn.ap-northeast-2.rds.amazonaws.com:5432/msa
+    username: root
+    password: TCzh3y5r
+    driver-class-name: org.postgresql.Driver
+
+service:
+  jwt:
+    access-expiration: 60000 # 1분
+    refresh-expiration: 600000 # 10분
+    secret-key: "a0eaadde03310f7e8ab93ac3290ca86565ac459fa73fb1fb3cbf8022e4ddd422705bba58b6983fc7ffdde7c833ea4eb69d9f70ed60a99f1bad482c23a0e92fd8"

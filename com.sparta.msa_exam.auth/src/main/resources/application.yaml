@@ -4,11 +4,15 @@ server:
 spring:
   application:
     name: auth
-  datasource:
-    url: jdbc:postgresql://localhost:5432/msa
-    username: postgres
-    password: spartaMsa
-    driver-class-name: org.postgresql.Driver
+  profiles:
+    active: dev
+  config:
+    import: "configserver:"
+  cloud:
+    config:
+      discovery:
+        enabled: true
+        service-id: config
   jpa:
     hibernate:
       ddl-auto: update
@@ -25,9 +29,3 @@ eureka:
   client:
     service-url:
       defaultZone: http://localhost:19090/eureka/
-
-service:
-  jwt:
-    access-expiration: 600000 # 10분
-    refresh-expiration: 10800000 # 3시간
-    secret-key: "a0eaadde03310f7e8ab93ac3290ca86565ac459fa73fb1fb3cbf8022e4ddd422705bba58b6983fc7ffdde7c833ea4eb69d9f70ed60a99f1bad482c23a0e92fd8"

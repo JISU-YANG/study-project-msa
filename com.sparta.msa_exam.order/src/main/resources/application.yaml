@@ -4,11 +4,15 @@ server:
 spring:
   application:
     name: order
-  datasource:
-    url: jdbc:postgresql://localhost:5432/msa
-    username: postgres
-    password: spartaMsa
-    driver-class-name: org.postgresql.Driver
+  profiles:
+    active: dev
+  config:
+    import: "configserver:"
+  cloud:
+    config:
+      discovery:
+        enabled: true
+        service-id: config
   jpa:
     hibernate:
       ddl-auto: update
