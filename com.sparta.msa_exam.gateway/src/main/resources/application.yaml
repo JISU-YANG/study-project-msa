@@ -13,10 +13,16 @@ spring:
           uri: lb://order
           predicates:
             - Path=/orders/**
-        - id: product
+        - id: product_high
           uri: lb://product
           predicates:
             - Path=/products/**
+            - Weight=product-group, 70
+        - id: product_low
+          uri: lb://product
+          predicates:
+            - Path=/products/**
+            - Weight=product-group, 30
         - id: auth
           uri: lb://auth
           predicates:
