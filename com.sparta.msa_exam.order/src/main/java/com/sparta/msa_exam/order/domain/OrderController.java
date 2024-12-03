@@ -15,8 +15,9 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping
-    public void createOrder(@Valid @RequestBody OrderRequestDto orderRequestDto) {
-        orderService.createOrder(orderRequestDto.getOrderProductDtoList());
+    public String createOrder(@Valid @RequestBody OrderRequestDto orderRequestDto) {
+        return orderService.createOrder(orderRequestDto.getOrderProductDtoList()) ?
+                "주문이 성공적으로 되었습니다." : "상품 정보를 가져올 수 없습니다. 다시 시도 해주세요.";
     }
 
     @GetMapping

@@ -4,7 +4,11 @@ import com.sparta.msa_exam.order.client.ProductClient;
 import com.sparta.msa_exam.order.domain.dto.OrderProductDto;
 import com.sparta.msa_exam.order.domain.model.Order;
 import com.sparta.msa_exam.order.domain.model.OrderProduct;
+import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,22 +17,38 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
     private final ProductClient productClient;
+    private final CircuitBreakerRegistry circuitBreakerRegistry;
+
 
     @Transactional
     @Override
-    public void createOrder(List<OrderProductDto> productList) {
+    @CircuitBreaker(name = "OrderService", fallbackMethod = "fallbackCreateOrder")
+    public boolean createOrder(List<OrderProductDto> productList) {
         Order order = Order.createOrder();
+
+        if (productList == null || productList.isEmpty()) {
+            log.error("Product list is null or empty");
+            throw new RuntimeException("Product list is null or empty");
+        }
 
         order.updateOrder(
                 validateProductList(order, productList)
         );
         orderRepository.save(order);
+
+        return true;
+    }
+
+    public boolean fallbackCreateOrder(List<OrderProductDto> productList, Throwable t) {
+        log.error("Create order failed", t);
+        return false;
     }
 
     @Transactional
@@ -73,4 +93,14 @@ public class OrderServiceImpl implements OrderService {
 
         return orderProductList;
     }
+
+    @PostConstruct
+    public void registerEventListener() {
+        circuitBreakerRegistry.circuitBreaker("validateProductList").getEventPublisher()
+                .onStateTransition(event -> log.info("CircuitBreaker State Transition: {}", event)) // 상태 전환 이벤트 리스너
+                .onFailureRateExceeded(event -> log.info("CircuitBreaker Failure Rate Exceeded: {}", event)) // 실패율 초과 이벤트 리스너
+                .onCallNotPermitted(event -> log.info("CircuitBreaker Call Not Permitted: {}", event)) // 호출 차단 이벤트 리스너
+                .onError(event -> log.info("CircuitBreaker Error: {}", event)); // 오류 발생 이벤트 리스너
+    }
+
 }
