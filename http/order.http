@@ -1,5 +1,6 @@
 ### 주문 생성
 POST localhost:19091/orders
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJ1c2VyX2lkIjoyLCJpc3MiOiJhdXRoIiwiaWF0IjoxNzMzMjA2NzIyLCJleHAiOjE3MzMyMDczMjJ9.fC4IDsl-vVb8AhZPffgoDtK6KSNMW4lTx2SEE45uDWQvvozZ6DVOwCxTpfFwateK1jSrR-1ndsg3sxlr0jvwQw
 Content-Type: application/json
 
 {
@@ -18,13 +19,16 @@ Content-Type: application/json
 
 ### 주문 전체 조회
 GET localhost:19091/orders
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJ1c2VyX2lkIjoyLCJpc3MiOiJhdXRoIiwiaWF0IjoxNzMzMjA2NzIyLCJleHAiOjE3MzMyMDczMjJ9.fC4IDsl-vVb8AhZPffgoDtK6KSNMW4lTx2SEE45uDWQvvozZ6DVOwCxTpfFwateK1jSrR-1ndsg3sxlr0jvwQw
 
 
 ### 주문 단건 조회
 GET localhost:19091/orders/2
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJ1c2VyX2lkIjoyLCJpc3MiOiJhdXRoIiwiaWF0IjoxNzMzMjA2NzIyLCJleHAiOjE3MzMyMDczMjJ9.fC4IDsl-vVb8AhZPffgoDtK6KSNMW4lTx2SEE45uDWQvvozZ6DVOwCxTpfFwateK1jSrR-1ndsg3sxlr0jvwQw
 
 ### 주문 수정
 PUT localhost:19091/orders/1
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJ1c2VyX2lkIjoyLCJpc3MiOiJhdXRoIiwiaWF0IjoxNzMzMjA2NzIyLCJleHAiOjE3MzMyMDczMjJ9.fC4IDsl-vVb8AhZPffgoDtK6KSNMW4lTx2SEE45uDWQvvozZ6DVOwCxTpfFwateK1jSrR-1ndsg3sxlr0jvwQw
 Content-Type: application/json
 
 {
@@ -42,3 +46,4 @@ Content-Type: application/json
 
 ### 주문 삭제
 DELETE localhost:19091/orders/1
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJ1c2VyX2lkIjoyLCJpc3MiOiJhdXRoIiwiaWF0IjoxNzMzMjA2NzIyLCJleHAiOjE3MzMyMDczMjJ9.fC4IDsl-vVb8AhZPffgoDtK6KSNMW4lTx2SEE45uDWQvvozZ6DVOwCxTpfFwateK1jSrR-1ndsg3sxlr0jvwQw
