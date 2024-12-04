@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/products")
@@ -16,28 +15,23 @@ public class ProductController {
     private final ProductService productService;
 
     @PostMapping
-    public void addProduct(@Valid @RequestBody ProductRequestDto requestDto) {
-        productService.createProduct(requestDto.getName(), requestDto.getSupplyPrice());
+    public Long addProduct(@Valid @RequestBody ProductRequestDto requestDto) {
+        return productService.createProduct(requestDto.getName(), requestDto.getSupplyPrice()).getId();
     }
 
     @GetMapping
     public List<ProductResponseDto> getAllProducts() {
-        return productService.getAllProducts()
-                .stream()
-                .map(ProductResponseDto::toEntity)
-                .collect(Collectors.toList());
+        return productService.getAllProducts();
     }
 
     @GetMapping("/{product_id}")
     public ProductResponseDto getProductById(@PathVariable(name = "product_id") Long productId) {
-        return ProductResponseDto.toEntity(
-                productService.getProductById(productId)
-        );
+        return productService.getProductById(productId);
     }
 
     @PutMapping("/{product_id}")
-    public void updateProduct(@PathVariable(name = "product_id") Long id, @Valid @RequestBody ProductRequestDto requestDto) {
-        productService.updateProduct(id, requestDto.getName(), requestDto.getSupplyPrice());
+    public ProductResponseDto updateProduct(@PathVariable(name = "product_id") Long id, @Valid @RequestBody ProductRequestDto requestDto) {
+        return productService.updateProduct(id, requestDto.getName(), requestDto.getSupplyPrice());
     }
 
     @DeleteMapping("/{product_id}")

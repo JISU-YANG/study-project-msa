@@ -5,9 +5,11 @@ import com.sparta.msa_exam.product.domain.model.Product;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.io.Serializable;
+
 @Getter
 @AllArgsConstructor
-public class ProductResponseDto {
+public class ProductResponseDto implements Serializable {
     @JsonProperty("product_id")
     private Long id;
 
