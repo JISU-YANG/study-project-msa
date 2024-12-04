@@ -33,6 +33,7 @@ public class OrderServiceImpl implements OrderService {
     private final CircuitBreakerRegistry circuitBreakerRegistry;
 
     @CachePut(cacheNames = "orderCache", key = "#result.orderId")
+    @CacheEvict(cacheNames = "orderAllCache", allEntries = true)
     @Transactional
     @Override
     @CircuitBreaker(name = "OrderService", fallbackMethod = "fallbackCreateOrder")
