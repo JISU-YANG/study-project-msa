@@ -7,9 +7,11 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.io.Serializable;
+
 @Getter
 @AllArgsConstructor
-public class OrderProductDto {
+public class OrderProductDto implements Serializable {
     @JsonProperty("product_id")
     @NotNull(message = "상품 ID를 입력해주세요.")
     private Long productId;

@@ -5,11 +5,12 @@ import com.sparta.msa_exam.order.domain.model.Order;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Getter
 @AllArgsConstructor
-public class OrderResponseDto {
+public class OrderResponseDto implements Serializable {
     @JsonProperty("order_id")
     private Long orderId;
 

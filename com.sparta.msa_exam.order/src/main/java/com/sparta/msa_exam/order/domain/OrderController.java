@@ -16,20 +16,18 @@ public class OrderController {
 
     @PostMapping
     public String createOrder(@Valid @RequestBody OrderRequestDto orderRequestDto) {
-        return orderService.createOrder(orderRequestDto.getOrderProductDtoList()) ?
+        return orderService.createOrder(orderRequestDto.getOrderProductDtoList()) == null ?
                 "주문이 성공적으로 되었습니다." : "상품 정보를 가져올 수 없습니다. 다시 시도 해주세요.";
     }
 
     @GetMapping
     public List<OrderResponseDto> getOrders() {
-        return orderService.getOrders().stream()
-                .map(OrderResponseDto::toEntity)
-                .toList();
+        return orderService.getOrders().stream().toList();
     }
 
     @GetMapping("/{order_id}")
     public OrderResponseDto getOrder(@PathVariable("order_id") Long orderId) {
-        return OrderResponseDto.toEntity(orderService.getOrder(orderId));
+        return orderService.getOrder(orderId);
     }
 
     @PutMapping("/{order_id}")

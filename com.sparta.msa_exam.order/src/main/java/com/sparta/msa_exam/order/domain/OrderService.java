@@ -1,18 +1,18 @@
 package com.sparta.msa_exam.order.domain;
 
 import com.sparta.msa_exam.order.domain.dto.OrderProductDto;
-import com.sparta.msa_exam.order.domain.model.Order;
+import com.sparta.msa_exam.order.domain.dto.OrderResponseDto;
 
 import java.util.List;
 
 public interface OrderService {
-    boolean createOrder(List<OrderProductDto> productList); // 주문 추가 API
+    OrderResponseDto createOrder(List<OrderProductDto> productList); // 주문 추가 API
 
-    void updateOrder(Long orderId, List<OrderProductDto> productList); // 주문에 상품 추가
+    OrderResponseDto updateOrder(Long orderId, List<OrderProductDto> productList); // 주문에 상품 추가
 
     void deleteOrder(Long orderId);
 
-    Order getOrder(Long orderId);
+    OrderResponseDto getOrder(Long orderId);
 
-    List<Order> getOrders();
+    List<OrderResponseDto> getOrders();
 }

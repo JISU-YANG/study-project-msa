@@ -2,6 +2,7 @@ package com.sparta.msa_exam.order.domain;
 
 import com.sparta.msa_exam.order.client.ProductClient;
 import com.sparta.msa_exam.order.domain.dto.OrderProductDto;
+import com.sparta.msa_exam.order.domain.dto.OrderResponseDto;
 import com.sparta.msa_exam.order.domain.model.Order;
 import com.sparta.msa_exam.order.domain.model.OrderProduct;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
@@ -9,6 +10,10 @@ import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +21,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -26,11 +32,11 @@ public class OrderServiceImpl implements OrderService {
     private final ProductClient productClient;
     private final CircuitBreakerRegistry circuitBreakerRegistry;
 
-
+    @CachePut(cacheNames = "orderCache", key = "#result.orderId")
     @Transactional
     @Override
     @CircuitBreaker(name = "OrderService", fallbackMethod = "fallbackCreateOrder")
-    public boolean createOrder(List<OrderProductDto> productList) {
+    public OrderResponseDto createOrder(List<OrderProductDto> productList) {
         Order order = Order.createOrder();
 
         if (productList == null || productList.isEmpty()) {
@@ -41,25 +47,43 @@ public class OrderServiceImpl implements OrderService {
         order.updateOrder(
                 validateProductList(order, productList)
         );
-        orderRepository.save(order);
 
-        return true;
+        return OrderResponseDto.toEntity(
+                orderRepository.save(order)
+        );
     }
 
-    public boolean fallbackCreateOrder(List<OrderProductDto> productList, Throwable t) {
+    public Order fallbackCreateOrder(List<OrderProductDto> productList, Throwable t) {
         log.error("Create order failed", t);
-        return false;
+        return null;
     }
 
+    @CachePut(cacheNames = "orderCache", key = "args[0]")
+    @CacheEvict(cacheNames = "orderAllCache", allEntries = true)
     @Transactional
     @Override
-    public void updateOrder(Long orderId, List<OrderProductDto> productList) {
+    public OrderResponseDto updateOrder(Long orderId, List<OrderProductDto> productList) {
         Order order = validateOrder(orderId);
         order.updateOrder(
                 validateProductList(order, productList)
         );
+        return OrderResponseDto.toEntity(
+                orderRepository.save(order)
+        );
     }
 
+    @Cacheable(cacheNames = "orderCache", key = "args[0]")
+    @Override
+    public OrderResponseDto getOrder(Long orderId) {
+        return OrderResponseDto.toEntity(
+                validateOrder(orderId)
+        );
+    }
+
+    @Caching(evict = {
+            @CacheEvict(cacheNames = "orderAllCache", allEntries = true),
+            @CacheEvict(cacheNames = "orderCache", key = "args[0]")
+    })
     @Transactional
     @Override
     public void deleteOrder(Long orderId) {
@@ -67,14 +91,12 @@ public class OrderServiceImpl implements OrderService {
         orderRepository.delete(order);
     }
 
+    @Cacheable(cacheNames = "orderAllCache", key = "methodName")
     @Override
-    public Order getOrder(Long orderId) {
-        return validateOrder(orderId);
-    }
-
-    @Override
-    public List<Order> getOrders() {
-        return orderRepository.findAll();
+    public List<OrderResponseDto> getOrders() {
+        return orderRepository.findAll().stream()
+                .map(OrderResponseDto::toEntity)
+                .collect(Collectors.toList());
     }
 
     private Order validateOrder(Long id) {
@@ -85,7 +107,7 @@ public class OrderServiceImpl implements OrderService {
     private List<OrderProduct> validateProductList(Order order, List<OrderProductDto> productList) {
         List<OrderProduct> orderProductList = new ArrayList<>();
 
-        for(OrderProductDto dto : productList) {
+        for (OrderProductDto dto : productList) {
             if (productClient.existProductById(dto.getProductId())) {
                 orderProductList.add(OrderProduct.createOrderProduct(order, dto.getProductId(), dto.getAmount()));
             }
